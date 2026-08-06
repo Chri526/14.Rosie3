@@ -1,19 +1,19 @@
 // config.js — identifiants du projet (voir GUIDE-CONFIGURATION.md pour le détail).
 
 window.FIREBASE_CONFIG = {
-  apiKey: "AIzaSyCo502goAIjY4tEweMvljKUZpu5w-A6528",
-  authDomain: "les-dd-a-sh.firebaseapp.com",
-  projectId: "les-dd-a-sh",
-  storageBucket: "les-dd-a-sh.firebasestorage.app",
-  messagingSenderId: "481563322437",
-  appId: "1:481563322437:web:5ed18115cb39846dcb9b2c"
+  apiKey: "AIzaSyDUvqhDN-MJVJfm_ugR7iLaR2Y95cvCn8U",
+  authDomain: "rosie-44a3c.firebaseapp.com",
+  projectId: "rosie-44a3c",
+  storageBucket: "rosie-44a3c.firebasestorage.app",
+  messagingSenderId: "589193333756",
+  appId: "1:589193333756:web:6922a7cb06b94992924079"
 };
 
 // Cloudinary : pour l'hébergement des photos/vidéos.
-window.CLOUDINARY_CLOUD_NAME = "xtmn1g9i";
-window.CLOUDINARY_UPLOAD_PRESET = "Les DD a Shanghai";
+window.CLOUDINARY_CLOUD_NAME = "j61gsva0";
+window.CLOUDINARY_UPLOAD_PRESET = "MonJournalIntime";
 
 // L'unique adresse email autorisée à ouvrir ce journal.
 // Doit être identique au compte créé dans Firebase (Authentication → Users)
 // et à l'email utilisé dans les règles Firestore (voir GUIDE-CONFIGURATION.md).
-window.JOURNAL_OWNER_EMAIL = "lesddashanghai@albumsouvenir.com";
+window.JOURNAL_OWNER_EMAIL = "chris26@monjournalintime.com";
