@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mon Journal</title>
+<meta name="description" content="Un journal intime personnel : écrivez vos journées, ajoutez photos et vidéos.">
+<meta name="theme-color" content="#3c332c">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Work+Sans:wght@400;500;600&family=Special+Elite&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ===== COUVERTURE ===== -->
+<section id="cover">
+  <div class="glow"></div>
+
+  <div class="cover-book" aria-hidden="true">
+    <svg viewBox="0 0 220 160" xmlns="http://www.w3.org/2000/svg">
+      <path d="M110 26 C90 14 55 8 18 12 C13 12.5 10 16 10 21 L10 132 C10 137 14 140 19 139 C54 135 88 141 108 152 L110 152 Z" fill="#faf5ea" stroke="#3c332c" stroke-width="2"/>
+      <path d="M110 26 C130 14 165 8 202 12 C207 12.5 210 16 210 21 L210 132 C210 137 206 140 201 139 C166 135 132 141 112 152 L110 152 Z" fill="#f1e6d3" stroke="#3c332c" stroke-width="2"/>
+      <line x1="110" y1="28" x2="110" y2="151" stroke="#3c332c" stroke-width="1.4" opacity="0.35"/>
+      <g stroke="#c9baa2" stroke-width="2.4" stroke-linecap="round" opacity="0.9">
+        <line x1="28" y1="44" x2="90" y2="38"/>
+        <line x1="28" y1="58" x2="94" y2="52"/>
+        <line x1="28" y1="72" x2="80" y2="67"/>
+        <line x1="28" y1="86" x2="90" y2="81"/>
+      </g>
+      <g stroke="#c9baa2" stroke-width="2.4" stroke-linecap="round" opacity="0.9">
+        <line x1="130" y1="38" x2="192" y2="44"/>
+        <line x1="126" y1="52" x2="188" y2="58"/>
+        <line x1="140" y1="67" x2="192" y2="72"/>
+      </g>
+      <g class="cover-quill">
+        <path d="M150 74 L188 36 C192 32 198 32 202 36 C206 40 206 46 202 50 L164 88 Z" fill="#e07a45" stroke="#3c332c" stroke-width="2"/>
+        <path d="M150 74 L138 96" stroke="#3c332c" stroke-width="2.4" stroke-linecap="round"/>
+        <circle class="cover-ink" cx="136" cy="100" r="2.6" fill="#3c332c"/>
+      </g>
+    </svg>
+  </div>
+
+  <h1>Mon<br><em>Journal</em></h1>
+  <p class="cover-date" id="cover-date"></p>
+  <p class="sub">Un espace rien qu'à vous : écrivez un peu de vos journées, gardez vos photos et vos vidéos, à votre rythme.</p>
+
+  <button class="btn btn-primary" id="btn-open-album">Ouvrir mon journal</button>
+
+  <form class="cover-login-card hidden-view" id="cover-login" novalidate>
+    <p class="cover-login-title">Ce journal est privé</p>
+    <div class="field"><label for="cover-login-email">Email</label><input type="email" id="cover-login-email" autocomplete="username" required></div>
+    <div class="field"><label for="cover-login-password">Mot de passe</label><input type="password" id="cover-login-password" autocomplete="current-password" required></div>
+    <button type="submit" class="btn-dark" id="cover-login-submit" style="width:100%;">Se connecter</button>
+    <a href="#" id="cover-login-forgot" class="cover-login-forgot">Mot de passe oublié ?</a>
+    <p id="cover-login-error" class="cover-login-error"></p>
+  </form>
+</section>
+
+<!-- ===== APPLICATION ===== -->
+<div id="app">
+  <header class="topbar">
+    <button class="topbar-title" id="btn-title-home">Mon Journal</button>
+  </header>
+
+  <!-- Chronologie -->
+  <main class="view" id="view-timeline">
+    <div class="view-header">
+      <h2>Vos pages</h2>
+    </div>
+    <div id="timeline-container"></div>
+  </main>
+
+  <!-- Calendrier -->
+  <main class="view hidden-view" id="view-calendar">
+    <div class="view-header">
+      <h2>Calendrier</h2>
+    </div>
+    <div class="calendar-nav">
+      <button id="cal-prev" class="cal-nav-btn" title="Mois précédent">‹</button>
+      <div class="cal-month-label" id="cal-month-label"></div>
+      <button id="cal-next" class="cal-nav-btn" title="Mois suivant">›</button>
+    </div>
+    <div class="calendar-weekdays">
+      <span>lun.</span><span>mar.</span><span>mer.</span><span>jeu.</span><span>ven.</span><span>sam.</span><span>dim.</span>
+    </div>
+    <div class="calendar-grid" id="calendar-grid"></div>
+  </main>
+
+  <!-- Galerie -->
+  <main class="view hidden-view" id="view-gallery">
+    <div class="filter-row" id="gallery-filters"></div>
+    <div class="gallery-grid" id="gallery-container"></div>
+  </main>
+
+  <!-- Ajouter -->
+  <main class="view hidden-view" id="view-add">
+    <div class="view-header">
+      <h2 id="add-heading">Écrire aujourd'hui</h2>
+    </div>
+
+    <div class="prompt-card hidden-view" id="writing-prompt">
+      <span class="prompt-icon">✒️</span>
+      <p id="writing-prompt-text"></p>
+      <div class="prompt-actions">
+        <button type="button" class="prompt-btn" id="btn-use-prompt">Écrire sur ce thème</button>
+        <button type="button" class="prompt-close" id="btn-dismiss-prompt" title="Masquer">✕</button>
+      </div>
+    </div>
+
+    <form class="form-card" id="entry-form">
+      <input type="hidden" id="entry-id">
+      <div class="row-2">
+        <div class="field">
+          <label for="entry-date">Date</label>
+          <input type="date" id="entry-date" required>
+        </div>
+        <div class="field">
+          <label for="entry-tag">Catégorie</label>
+          <select id="entry-tag">
+            <option value="Quotidien">Quotidien</option>
+            <option value="Réflexion">Réflexion</option>
+            <option value="Objectifs">Objectifs</option>
+            <option value="Voyages">Voyages</option>
+            <option value="Amis">Amis</option>
+            <option value="Famille">Famille</option>
+            <option value="Travail">Travail</option>
+            <option value="Fêtes">Fêtes</option>
+            <option value="Event">Event</option>
+            <option value="Nourriture">Nourriture</option>
+            <option value="Random">Random</option>
+            <option value="Autre">Autre</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label for="entry-title">Titre</label>
+        <input type="text" id="entry-title" placeholder="Ex. Un dimanche tranquille" required>
+      </div>
+      <div class="field">
+        <label for="entry-note">Votre page</label>
+        <div class="richtoolbar" id="note-toolbar">
+          <button type="button" class="rt-btn" data-cmd="bold" title="Gras"><b>G</b></button>
+          <button type="button" class="rt-btn" data-cmd="italic" title="Italique"><i>I</i></button>
+          <button type="button" class="rt-btn" data-cmd="underline" title="Souligné"><u>S</u></button>
+          <span class="rt-sep"></span>
+          <select id="note-font" class="rt-font" title="Police">
+            <option value="">Police…</option>
+            <option value="Fraunces">Élégante</option>
+            <option value="Work Sans">Simple</option>
+            <option value="Caveat">Manuscrite</option>
+            <option value="Special Elite">Machine à écrire</option>
+          </select>
+          <span class="rt-sep"></span>
+          <div class="rt-swatches" data-mode="fore" title="Couleur du texte">
+            <button type="button" class="rt-swatch" style="background:#3c332c" data-color="#3c332c"></button>
+            <button type="button" class="rt-swatch" style="background:#e07a45" data-color="#e07a45"></button>
+            <button type="button" class="rt-swatch" style="background:#7fa0ac" data-color="#7fa0ac"></button>
+            <button type="button" class="rt-swatch" style="background:#7c8f5e" data-color="#7c8f5e"></button>
+            <button type="button" class="rt-swatch" style="background:#b0413e" data-color="#b0413e"></button>
+          </div>
+          <span class="rt-sep"></span>
+          <div class="rt-swatches" data-mode="hilite" title="Surligner">
+            <button type="button" class="rt-swatch" style="background:#fbe3ac" data-color="#fbe3ac"></button>
+            <button type="button" class="rt-swatch" style="background:#f4cdb3" data-color="#f4cdb3"></button>
+            <button type="button" class="rt-swatch" style="background:#d7e0c7" data-color="#d7e0c7"></button>
+            <button type="button" class="rt-swatch" style="background:#cfe1e6" data-color="#cfe1e6"></button>
+            <button type="button" class="rt-swatch rt-swatch--none" data-color="transparent" title="Effacer le surlignage">✕</button>
+          </div>
+          <span class="rt-sep"></span>
+          <div class="rt-emoji-wrap">
+            <button type="button" class="rt-btn" id="btn-emoji-toggle" title="Emoji">😊</button>
+            <div class="rt-emoji-panel hidden-view" id="emoji-panel">
+              <div class="rt-emoji-head">
+                <span>Emoji</span>
+                <button type="button" id="btn-emoji-close">✕</button>
+              </div>
+              <div class="rt-emoji-grid">
+              <button type="button" data-emoji="❤️">❤️</button>
+              <button type="button" data-emoji="😍">😍</button>
+              <button type="button" data-emoji="🥰">🥰</button>
+              <button type="button" data-emoji="😂">😂</button>
+              <button type="button" data-emoji="😊">😊</button>
+              <button type="button" data-emoji="🎉">🎉</button>
+              <button type="button" data-emoji="✈️">✈️</button>
+              <button type="button" data-emoji="🌇">🌇</button>
+              <button type="button" data-emoji="📸">📸</button>
+              <button type="button" data-emoji="🍜">🍜</button>
+              <button type="button" data-emoji="🥟">🥟</button>
+              <button type="button" data-emoji="🏮">🏮</button>
+              <button type="button" data-emoji="🎊">🎊</button>
+              <button type="button" data-emoji="🙌">🙌</button>
+              <button type="button" data-emoji="✨">✨</button>
+              <button type="button" data-emoji="💕">💕</button>
+              <button type="button" data-emoji="🌙">🌙</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="entry-note" class="richtext-editable" contenteditable="true" data-placeholder="Racontez votre journée…"></div>
+      </div>
+      <div class="field">
+        <label>Photos et vidéos</label>
+        <div class="dropzone" id="dropzone">
+          Glissez vos fichiers ici, ou cliquez pour parcourir
+          <input type="file" id="file-input" accept="image/*,video/*" multiple style="display:none">
+        </div>
+        <div class="preview-grid" id="preview-grid"></div>
+      </div>
+      <div class="progress-bar" id="upload-progress" style="display:none;"><div></div></div>
+      <div class="form-actions">
+        <button type="button" class="btn-outline" id="btn-cancel-add">Annuler</button>
+        <button type="submit" class="btn-dark" id="btn-save-entry">Enregistrer la page</button>
+      </div>
+    </form>
+  </main>
+
+  <!-- Réglages -->
+  <main class="view hidden-view" id="view-settings">
+    <div class="view-header">
+      <h2>Réglages</h2>
+    </div>
+
+    <div class="settings-card">
+      <h3>Mon compte</h3>
+      <p>Ce journal est privé et protégé par mot de passe.</p>
+      <div id="account-panel"></div>
+    </div>
+  </main>
+
+  <!-- Barre de navigation basse -->
+  <nav class="bottom-nav">
+    <span id="entries-counter" class="connection-badge"></span>
+    <button class="bn-item bn-home" id="btn-back-cover">
+      <span class="bn-avatar"><img src="icon-192.png" alt=""></span>
+      <span class="bn-label">Mon Journal</span>
+    </button>
+    <div class="bn-icons">
+      <button class="bn-item bn-add" data-view="add" title="Écrire aujourd'hui">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10" fill="currentColor"/><path d="M12 8v8M8 12h8" stroke="var(--warm-dark)" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <button class="bn-item bn-calendar" data-view="calendar" title="Calendrier">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="3" y="5" width="18" height="16" rx="2.2" stroke="currentColor" stroke-width="1.7"/>
+          <path d="M3 9.5h18" stroke="currentColor" stroke-width="1.7"/>
+          <path d="M7.2 3v4M16.8 3v4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+          <rect x="6.3" y="12" width="2.8" height="2.8" rx="0.5" fill="currentColor"/>
+          <rect x="10.6" y="12" width="2.8" height="2.8" rx="0.5" fill="currentColor"/>
+          <rect x="14.9" y="12" width="2.8" height="2.8" rx="0.5" fill="currentColor"/>
+          <rect x="6.3" y="16.2" width="2.8" height="2.8" rx="0.5" fill="currentColor"/>
+          <rect x="10.6" y="16.2" width="2.8" height="2.8" rx="0.5" fill="currentColor"/>
+        </svg>
+      </button>
+      <button class="bn-item bn-gallery" data-view="gallery" title="Galerie">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="3" width="7.5" height="7.5" rx="1.5" fill="currentColor"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.5" fill="currentColor"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.5" fill="currentColor"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.5" fill="currentColor"/></svg>
+      </button>
+      <button class="bn-item bn-settings" data-view="settings" title="Réglages">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="3.2" stroke="currentColor" stroke-width="1.8"/><path d="M12 3.5v2.3M12 18.2v2.3M20.5 12h-2.3M5.8 12H3.5M17.7 6.3l-1.6 1.6M7.9 16.1l-1.6 1.6M17.7 17.7l-1.6-1.6M7.9 7.9 6.3 6.3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  </nav>
+</div>
+
+<!-- ===== Lightbox ===== -->
+<div id="lightbox">
+  <button class="close" id="lightbox-close">×</button>
+  <button class="nav-btn nav-prev" id="lightbox-prev">‹</button>
+  <div class="content" id="lightbox-content"></div>
+  <button class="nav-btn nav-next" id="lightbox-next">›</button>
+</div>
+
+<div id="toast"></div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="config.js"></script>
+<script src="db.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
