@@ -16,4 +16,4 @@ window.CLOUDINARY_UPLOAD_PRESET = "MonJournalIntime";
 // L'unique adresse email autorisée à ouvrir ce journal.
 // Doit être identique au compte créé dans Firebase (Authentication → Users)
 // et à l'email utilisé dans les règles Firestore (voir GUIDE-CONFIGURATION.md).
-window.JOURNAL_OWNER_EMAIL = "chris26@monjournalintime.com";
+window.JOURNAL_OWNER_EMAIL = "chris26@journalintime.com";
