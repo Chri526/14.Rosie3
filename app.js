@@ -117,7 +117,7 @@ $('#btn-open-album').addEventListener('click', async () => {
   }
 });
 
-$('#cover-login-form').addEventListener('submit', async (e) => {
+$('#cover-login').addEventListener('submit', async (e) => {
   e.preventDefault();
   const email = $('#cover-login-email').value.trim();
   const password = $('#cover-login-password').value;
